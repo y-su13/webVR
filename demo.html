@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WebVR Demo</title>
+  <style>
+  body {
+    background:#000;
+    width: 100%;
+    height: 100%;
+  }
+  </style>
+</head>
+<body>
+  <script src="./js/three.min.js"></script>
+  <script src="./js/StereoEffect.js"></script>
+  <script src="./js/OrbitControls.js"></script>
+  <script src="./js/DeviceOrientationControls.js"></script>
+
+  <script>
+  var scene, camera, renderer, effect, element, controls, geometry, group;
+  var mouseX = 0, mouseY = 0;
+  var windowHalfX = window.innerWidth / 2;
+  var windowHalfY = window.innerHeight / 2;
+  // document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+  init();
+
+  function init() {
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1, 10000);
+    camera.position.set(0, 15, 0);
+    scene.add(camera);
+
+    renderer = new THREE.WebGLRenderer();
+    element = renderer.domElement;
+    document.body.appendChild(renderer.domElement);
+
+    effect = new THREE.StereoEffect(renderer);
+
+    //Handle mouse control
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.target.set(
+      camera.position.x + 0.1,
+      camera.position.y,
+      camera.position.z
+    );
+    window.addEventListener('deviceorientation', setDeviceOrientationControls, true);
+
+        //Create light
+    var light = new THREE.PointLight( 0xffffff, 1.2, 0 );
+    light.position.set(0, 50, 0);
+    scene.add(light);
+
+    // Create floor
+    var floorTexture = THREE.ImageUtils.loadTexture('img/grass.jpg');
+    floorTexture.wrapS = THREE.RepeatWrapping;
+    floorTexture.wrapT = THREE.RepeatWrapping;
+    floorTexture.repeat = new THREE.Vector2(50, 50);
+    var floorMaterial = new THREE.MeshPhongMaterial({
+      map: floorTexture
+    });
+    var floorGeometry = new THREE.PlaneBufferGeometry(1000, 1000);
+    var floor = new THREE.Mesh(floorGeometry, floorMaterial);
+    floor.rotation.x = -Math.PI / 2;
+    scene.add(floor);
+
+    var geometry = new THREE.BoxGeometry( 40, 40, 40 );
+    var material = new THREE.MeshNormalMaterial( { overdraw: 0.5 } );
+
+    group = new THREE.Group();
+
+    for ( var i = 0; i < 500; i ++ ) {
+
+        var mesh = new THREE.Mesh( geometry, material );
+        mesh.position.x = Math.random() * 2000 - 1000;
+        mesh.position.y = Math.random() * 2000 + 100;
+        mesh.position.z = Math.random() * 2000 - 1000;
+        mesh.rotation.x = Math.random() * 2 * Math.PI;
+        mesh.rotation.y = Math.random() * 2 * Math.PI;
+        mesh.rotation.z = Math.random() * 2 * Math.PI;
+        mesh.matrixAutoUpdate = false;
+        mesh.updateMatrix();
+        group.add( mesh );
+
+    }
+
+    scene.add( group );
+    renderer = new THREE.CanvasRenderer();
+    renderer.setClearColor( 0xffffff );
+
+    animate();
+  }
+
+  // Our preferred controls via DeviceOrientation
+  function setDeviceOrientationControls(e) {
+    controls = new THREE.DeviceOrientationControls(camera, true);
+    controls.connect();
+    controls.update();
+    window.removeEventListener('deviceorientation', setDeviceOrientationControls, true);
+  }
+
+  function animate() {
+    requestAnimationFrame(animate);
+
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+
+    var currentSeconds = Date.now();
+    group.rotation.x = Math.sin( (currentSeconds - 30) * 0.0007 ) * 0.5;
+    group.rotation.z = Math.sin( (currentSeconds/2 - 15) * 0.0002 ) * 0.5;
+
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(width, height);
+    effect.setSize(width, height);
+
+    controls.update();
+    effect.render(scene, camera);
+  }
+  </script>
+</body>
+</html>
