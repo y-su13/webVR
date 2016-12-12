@@ -21,7 +21,7 @@
   var mouseX = 0, mouseY = 0;
   var windowHalfX = window.innerWidth / 2;
   var windowHalfY = window.innerHeight / 2;
-  // document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+  document.addEventListener( 'mousemove', onDocumentMouseMove, false );
   init();
 
   function init() {
@@ -96,6 +96,13 @@
     controls.connect();
     controls.update();
     window.removeEventListener('deviceorientation', setDeviceOrientationControls, true);
+  }
+
+  function onDocumentMouseMove(event) {
+
+	mouseX = ( event.clientX - windowHalfX ) * 10;
+	mouseY = ( event.clientY - windowHalfY ) * 10;
+
   }
 
   function animate() {

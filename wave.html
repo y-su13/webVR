@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js canvas - particles - waves</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				background-color: #000000;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			a {
+				color:#0078ff;
+			}
+		</style>
+	</head>
+	<body>
+        <p></p>
+        <center>
+		    <input type="submit" name="Start" id="Start" value="Start" style="width:200px; height:30px;" onclick="clickStart()">
+		    <input type="submit" name="Stop" id="Stop" value="Stop" style="width:200px; height:30px;" onclick="clickStop()">
+		    <input type="submit" name="Repeat" id="Repeat" value="Repeat" style="width:200px; height:30px;" onclick="clickRepeat()">
+		</center>
+		<p></p>
+		<center>
+		    <a id="T"></a>
+            <a id="DTnow"></a>
+		    <input type="submit" name="Add" id="Add" value="DT++" style="width:200px; height:30px;" onclick="clickAdd()">
+		    <input type="submit" name="Minus" id="Minus" value="DT--" style="width:200px; height:30px;" onclick="clickMinus()">
+		</center>
+
+		<script src="js/three.js"></script>
+		<script src="js/renderers/Projector.js"></script>
+		<script src="js/renderers/CanvasRenderer.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>
+
+			var SEPARATION = 100, AMOUNTX = 41, AMOUNTY = 40;
+
+			var container, stats;
+			var camera, scene, renderer;
+
+			var particles, particle, count = 0;
+			var hui = 0;
+			var T = 0.0;
+			var DT = 0;
+			var DTnow = 0.1;
+			var a = 0.95;
+			var h = 0;
+			var u = 0;
+			var h0 = 0;
+			var u0 = 0;
+
+// 			var d = document.getElementById( 'DTnow' );
+//             d.innerHTML = String( DTnow );
+
+			var mouseX = 0, mouseY = 0;
+
+			var windowHalfX = window.innerWidth / 2;
+			var windowHalfY = window.innerHeight / 2;
+
+			init();
+			animate();
+
+			function init() {
+
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+
+				camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+				camera.position.z = 2000;
+
+				scene = new THREE.Scene();
+
+				particles = new Array();
+				h = new Array();
+				u = new Array();
+				h0 = new Array();
+				u0 = new Array();
+
+				var PI2 = Math.PI * 2;
+				var material = new THREE.SpriteCanvasMaterial( {
+
+					color: 0xffffff,
+					program: function ( context ) {
+
+						context.beginPath();
+						context.arc( 0, 0, 0.5, 0, PI2, true );
+						context.fill();
+
+					}
+
+				} );
+
+				for ( var ix = 0; ix < AMOUNTX; ix ++ ) {
+
+					particle = particles[ ix ] = new THREE.Sprite( material );
+					particle.position.x = ix * SEPARATION - ( ( AMOUNTX * SEPARATION ) / 2 );
+					particle.position.z = 0.0;
+					u[ ix ] = 0.0;
+					u0[ ix ] = 0.0;
+
+					if (ix < AMOUNTX / 2) {
+
+					    particle.position.y = 800.0;
+					    h[ ix ] = 800.0;
+					    h0[ ix ] = 800.0;
+
+					}
+
+					if (ix >= AMOUNTX / 2) {
+
+					    particle.position.y = 200.0;
+					    h[ ix ] = 800.0;
+					    h0[ ix ] = 200.0;
+
+					}
+
+					particle.scale.x = particle.position.y / 10;
+					particle.scale.y = particle.position.y / 10;
+
+				    scene.add( particle );
+
+				}
+
+				var geometry = new THREE.Geometry();
+                var material = new THREE.LineBasicMaterial( { vertexColors: 0xffffff, linewidth: 2} );
+                var p1 = new THREE.Vector3( -2050, 1000, 0 );
+				var p2 = new THREE.Vector3( -2050, 0, 0 );
+                var p3 = new THREE.Vector3(  1950, 0, 0 );
+                var p4 = new THREE.Vector4(  1950, 1000, 0 );
+
+                geometry.vertices.push( p1 );
+                geometry.vertices.push( p2 );
+                var line = new THREE.Line( geometry, material, THREE.LinePieces );
+                scene.add( line );
+				
+                geometry.vertices.push( p2 );
+                geometry.vertices.push( p3 );
+                var line = new THREE.Line( geometry, material, THREE.LinePieces );
+                scene.add( line );
+
+                geometry.vertices.push( p3 );
+                geometry.vertices.push( p4 );
+                var line = new THREE.Line( geometry, material, THREE.LinePieces );
+                scene.add( line );
+
+				renderer = new THREE.CanvasRenderer();
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				container.appendChild( renderer.domElement );
+
+				stats = new Stats();
+				container.appendChild( stats.dom );
+
+				window.addEventListener( 'resize', onWindowResize, false );
+
+			}
+
+			function onWindowResize() {
+
+				windowHalfX = window.innerWidth / 2;
+				windowHalfY = window.innerHeight / 2;
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				render();
+				stats.update();
+
+			}
+
+			function render() {
+
+                document.getElementById( "T" ).innerHTML = "T = " + String( T.toFixed( 2 ) ) + "&nbsp&nbsp";
+				document.getElementById( "DTnow" ).innerHTML = "DT = " + String( DTnow.toFixed( 2 ) ) + "&nbsp&nbsp";
+
+				if ( DT > 0 ){
+					for ( var ix = 1; ix < AMOUNTX - 1; ix ++ ) {
+
+	                    particle = particles[ ix ];
+	                    hui = a * h0[ ix ] * u0[ ix ] + 0.5 * ( 1 - a ) * ( h0[ ix + 1] * u0[ ix + 1] + h0[ ix - 1] * u0[ ix - 1] ) - ( 9.8 * h0[ ix ] * ( h0[ ix + 1] - h0[ ix - 1] ) + ( h0[ ix + 1] * u0[ ix + 1] * u0[ ix + 1] - h0[ ix - 1] * u0[ ix - 1] * u0[ ix - 1] ) ) * ( DT / SEPARATION ) * 0.5;
+						h[ ix ] = a * h0[ ix ] + 0.5 * ( 1 - a ) * ( h0[ ix + 1] + h0[ ix - 1] ) - ( h0[ ix + 1] * u0[ ix + 1] - h0[ ix - 1] * u0[ ix - 1] ) * ( DT / SEPARATION ) * 0.5;
+						u[ ix ] = hui / particle.position.y;
+						particle.position.y = h[ ix ]
+						particle.scale.x = particle.position.y / 10;
+						particle.scale.y = particle.position.y / 10;
+					}
+
+					particle = particles[ 0 ];
+					particle_right = particles[ 1 ];
+					particle.position.y = particle_right.position.y;
+					particle.scale.x = particle_right.scale.x;
+					particle.scale.y = particle_right.scale.y;
+					u[ 0 ] = - u[ 1 ];
+
+					particle = particles[ AMOUNTX - 1 ];
+					particle_left = particles[ AMOUNTX - 2 ];
+					particle.position.y = particle_left.position.y;
+					particle.scale.x = particle_left.scale.x;
+					particle.scale.y = particle_left.scale.y;
+					u[ AMOUNTX - 1 ] = - u[ AMOUNTX - 2 ];
+
+					for ( var ix = 0; ix < AMOUNTX; ix ++ ) {
+
+				      	h0[ ix ] = particles[ ix ].position.y;
+					  	u0[ ix ] = u[ ix ];
+
+					T += DT;
+
+				    }
+				}
+
+				renderer.render( scene, camera );
+
+				count += 0.1;
+
+			}
+
+			function clickStart() {
+
+                DT = DTnow;
+
+			}
+
+			function clickStop() {
+
+                DT = -1;
+
+			}
+
+			function clickRepeat() {
+                
+                T = 0.0;
+				DT = -1;
+				DTnow = 0.1;
+                for ( var ix = 0; ix < AMOUNTX; ix ++ ) {
+
+					u[ ix ] = 0.0;
+					u0[ ix ] = 0.0;
+
+					if (ix < AMOUNTX / 2) {
+
+					    particles[ ix ].position.y = 800.0;
+					    h[ ix ] = 800.0;
+					    h0[ ix ] = 800.0;
+
+					}
+
+					if (ix >= AMOUNTX / 2) {
+
+					    particles[ ix ].position.y = 200.0;
+					    h[ ix ] = 800.0;
+					    h0[ ix ] = 200.0;
+
+					}
+
+					particles[ ix ].scale.x = particles[ ix ].position.y / 10;
+					particles[ ix ].scale.y = particles[ ix ].position.y / 10;
+
+                }
+
+                particle = particles[ 0 ];
+				particle_right = particles[ 1 ];
+				particle.position.y = particle_right.position.y;
+				particle.scale.x = particle_right.scale.x;
+				particle.scale.y = particle_right.scale.y;
+
+				particle = particles[ AMOUNTX - 1 ];
+				particle_left = particles[ AMOUNTX - 2 ];
+				particle.position.y = particle_left.position.y;
+				particle.scale.x = particle_left.scale.x;
+				particle.scale.y = particle_left.scale.y;
+
+			}
+
+			function clickAdd() {
+                
+                DTnow += 0.01;
+                if ( DT > 0 ) {
+
+                    DT = DTnow;
+
+                }
+
+			}
+
+			function clickMinus() {
+
+				if ( DTnow >= 0.02 ) {
+
+					DTnow -= 0.01;
+
+					if ( DT > 0 ) {
+
+                    	DT = DTnow;
+
+               		}
+
+				}
+
+                
+			}			
+
+		</script>
+	</body>
+</html>
