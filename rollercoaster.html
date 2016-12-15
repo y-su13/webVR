@@ -23,7 +23,6 @@
 
 		<script src="js/RollerCoaster.js"></script>
 		<script src="js/StereoEffect.js"></script>
-	    <script src="js/OrbitControls.js"></script>
      	<script src="js/DeviceOrientationControls.js"></script>
 
 		<script>
@@ -197,14 +196,13 @@
 
 				position.copy( curve.getPointAt( progress ) );
 
-				position.y += 3.0;
-				// position.y += 3 * Math.sqrt( velocity.x * velocity.x + velocity.z * velocity.z ) / len;
-				// position.x += 3 * velocity.x * velocity.y * Math.sqrt( velocity.x * velocity.x + velocity.z * velocity.z ) / len;
-				// position.z += 3 * velocity.z * velocity.y * Math.sqrt( velocity.x * velocity.x + velocity.z * velocity.z ) / len;
+				tangent.copy( curve.getTangentAt( progress ) );
+
+				position.y += 3 * Math.sqrt( tangent.x * tangent.x + tangent.z * tangent.z );
+				position.x -= 3 * tangent.x * tangent.y * Math.sqrt( tangent.x * tangent.x + tangent.z * tangent.z );
+				position.z -= 3 * tangent.z * tangent.y * Math.sqrt( tangent.x * tangent.x + tangent.z * tangent.z );
 
 				camera.position.copy( position );
-
-				tangent.copy( curve.getTangentAt( progress ) );
 
 				velocity -= tangent.y * 0.0000015 * delta;
 				velocity = Math.max( velocity, 0.00004 );
