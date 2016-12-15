@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>WebVR Deviceorientation</title>
+		<title>three.js webgl - controls - deviceorientation</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="user-scalable=no, initial-scale=1">
 		<style>
@@ -28,87 +28,24 @@
 		</style>
 	</head>
 	<body>
+	    <center>
+	    	<a id = "alpha"></a>
+	    	<a id = "beta"></a>
+	    	<p></p>
+	    	<a id = "gama"></a>
+	    </center>
+        <script type="text/javascript">
 
-		<div id="container"></div>
+        	window.addEventListener("deviceorientation", orientationHandler, false);  
 
-		<center>
-		    <a id="alpha"></a>
-		    <a id="beta"></a>
-		    <p></p>
-		    <a id="gamma"></a>
-		    <a id="orient"></a>
-		</center>
+            function orientationHandler(event) {  
 
-		<script src="js/three.js"></script>
-		<script src="js/DeviceOrientationControls.js"></script>
+            	document.getElementById( "alpha" ).innerHTML = "alpha = " + String( event.alpha ) + "&nbsp&nbsp";
+            	document.getElementById( "beta" ).innerHTML = "beta = " + String( event.beta ) + "&nbsp&nbsp";
+            	document.getElementById( "gama" ).innerHTML = "gama = " + String( event.gama );
 
-		<script>
-			(function() {
-				  "use strict";
-
-				  window.addEventListener('load', function() {
-
-						var container, camera, scene, renderer, controls, geometry, mesh;
-
-						var animate = function(){
-
-							window.requestAnimationFrame( animate );
-
-							controls.update();
-                            
-							document.getElementById( "alpha" ).innerHTML = "alpha = " + String( controls.alpha ) + "&nbsp&nbsp";
-							document.getElementById( "beta" ).innerHTML = "beta = " + String( controls.beta ) + "&nbsp&nbsp";
-							document.getElementById( "gamma" ).innerHTML = "gamma = " + String( controls.gamma ) + "&nbsp&nbsp";
-							document.getElementById( "orient" ).innerHTML = "orient = " + String( controls.orient );
-							
-							renderer.render(scene, camera);
-
-						};
-
-						container = document.getElementById( 'container' );
-
-						camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1100);
-
-						controls = new THREE.DeviceOrientationControls( camera );
-
-						scene = new THREE.Scene();
-
-						var geometry = new THREE.SphereGeometry( 500, 16, 8 );
-						geometry.scale( - 1, 1, 1 );
-
-						var material = new THREE.MeshBasicMaterial( {
-							map: new THREE.TextureLoader().load( 'img/house.jpg' )
-						} );
-
-						var mesh = new THREE.Mesh( geometry, material );
-						scene.add( mesh );
-
-						var geometry = new THREE.BoxGeometry( 100, 100, 100, 4, 4, 4 );
-						var material = new THREE.MeshBasicMaterial( { color: 0xff00ff, side: THREE.BackSide, wireframe: true } );
-						var mesh = new THREE.Mesh( geometry, material );
-						scene.add( mesh );
-
-						renderer = new THREE.WebGLRenderer();
-						renderer.setPixelRatio( window.devicePixelRatio );
-						renderer.setSize(window.innerWidth, window.innerHeight);
-						renderer.domElement.style.position = 'absolute';
-						renderer.domElement.style.top = 0;
-						container.appendChild(renderer.domElement);
-
-						window.addEventListener('resize', function() {
-
-							camera.aspect = window.innerWidth / window.innerHeight;
-							camera.updateProjectionMatrix();
-							renderer.setSize( window.innerWidth, window.innerHeight );
-
-						}, false);
-
-						animate();
-
-				  }, false);
-
-			})();
-		</script>
+	        }
+        </script>
 
 	</body>
 </html>
