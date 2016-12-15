@@ -11,10 +11,10 @@
   </style>
 </head>
 <body>
-  <script src="./js/three.min.js"></script>
-  <script src="./js/StereoEffect.js"></script>
-  <script src="./js/OrbitControls.js"></script>
-  <script src="./js/DeviceOrientationControls.js"></script>
+  <script src="js/three.min.js"></script>
+  <script src="js/StereoEffect.js"></script>
+  <script src="js/OrbitControls.js"></script>
+  <script src="js/DeviceOrientationControls.js"></script>
 
   <script>
   var scene, camera, renderer, effect, element, controls, geometry, group;
@@ -32,7 +32,7 @@
 
     renderer = new THREE.WebGLRenderer();
     element = renderer.domElement;
-    document.body.appendChild(renderer.domElement);
+    document.body.appendChild( element );
 
     effect = new THREE.StereoEffect(renderer);
 
