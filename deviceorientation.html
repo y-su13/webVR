@@ -32,9 +32,11 @@
 		<div id="container"></div>
 
 		<center>
-		    <a id="X"></a>
-		    <a id="Y"></a>
-		    <a id="Z"></a>
+		    <a id="alpha"></a>
+		    <a id="beta"></a>
+		    <p></p>
+		    <a id="gamma"></a>
+		    <a id="orient"></a>
 		</center>
 
 		<script src="js/three.js"></script>
@@ -52,9 +54,10 @@
 
 							window.requestAnimationFrame( animate );
                             
-							document.getElementById( "X" ).innerHTML = "X = " + String( controls ) + "&nbsp&nbsp";
-							document.getElementById( "Y" ).innerHTML = "Y = " + String( controls ) + "&nbsp&nbsp";
-							document.getElementById( "Z" ).innerHTML = "Z = " + String( controls );
+							document.getElementById( "alpha" ).innerHTML = "alpha = " + String( controls.alpha ) + "&nbsp&nbsp";
+							document.getElementById( "beta" ).innerHTML = "beta = " + String( controls.beta ) + "&nbsp&nbsp";
+							document.getElementById( "gamma" ).innerHTML = "gamma = " + String( controls.gamma ) + "&nbsp&nbsp";
+							document.getElementById( "orient" ).innerHTML = "orient = " + String( controls.orient ) + "&nbsp&nbsp";
 
 							controls.update();
 							renderer.render(scene, camera);
