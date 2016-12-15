@@ -53,13 +53,14 @@
 						var animate = function(){
 
 							window.requestAnimationFrame( animate );
+
+							controls.update();
                             
 							document.getElementById( "alpha" ).innerHTML = "alpha = " + String( controls.alpha ) + "&nbsp&nbsp";
 							document.getElementById( "beta" ).innerHTML = "beta = " + String( controls.beta ) + "&nbsp&nbsp";
 							document.getElementById( "gamma" ).innerHTML = "gamma = " + String( controls.gamma ) + "&nbsp&nbsp";
-							document.getElementById( "orient" ).innerHTML = "orient = " + String( controls.orient ) + "&nbsp&nbsp";
-
-							controls.update();
+							document.getElementById( "orient" ).innerHTML = "orient = " + String( controls.orient );
+							
 							renderer.render(scene, camera);
 
 						};
