@@ -233,7 +233,7 @@
 
 				camera.lookAt( lookAt.copy( position ).sub( tangent ) );
                 
-                // camera.updateProjectionMatrix();
+                camera.updateProjectionMatrix();
                 controls.update();
                 renderer.setSize(width, height);
     			effect.setSize(width, height);
