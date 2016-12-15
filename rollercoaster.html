@@ -22,9 +22,9 @@
 		<script src="js/three.js"></script>
 
 		<script src="js/RollerCoaster.js"></script>
-		<script src="js/StereoEffect.js"></script><!-- 
+		<script src="js/StereoEffect.js"></script>
 	    <script src="js/OrbitControls.js"></script>
-     	<script src="js/DeviceOrientationControls.js"></script> -->
+     	<script src="js/DeviceOrientationControls.js"></script>
 
 		<script>
             var scene, camera, renderer, effect, element, controls, geometry, group, curve;
@@ -36,6 +36,9 @@
 
 			var velocity = 0;
 			var progress = 0;
+
+			document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+
             init();
 
             function init() {
@@ -53,12 +56,19 @@
 				document.body.appendChild( element );
 
 				effect = new THREE.StereoEffect(renderer);
+         
+                controls = new THREE.OrbitControls(camera, renderer.domElement);
+				controls.target.set(
+				      camera.position.x + 0.1,
+				      camera.position.y,
+				      camera.position.z
+				);
+
+				window.addEventListener('deviceorientation', setDeviceOrientationControls, true);
 
 				var light = new THREE.HemisphereLight( 0xfff0f0, 0x606066 );
 				light.position.set( 1, 1, 1 );
 				scene.add( light );
-
-
 
 				var geometry = new THREE.PlaneGeometry( 5000, 5000, 15, 15 );
 				geometry.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) );
@@ -184,6 +194,22 @@
 
             }
 
+			function setDeviceOrientationControls(e) {
+
+			    controls = new THREE.DeviceOrientationControls(camera, true);
+			    controls.connect();
+			    controls.update();
+			    window.removeEventListener('deviceorientation', setDeviceOrientationControls, true);
+
+			}            
+
+            function onDocumentMouseMove(event) {
+
+				mouseX = ( event.clientX - windowHalfX ) * 10;
+				mouseY = ( event.clientY - windowHalfY ) * 10;
+
+			}
+
 			function animate() {
 
 				requestAnimationFrame( animate );
@@ -207,6 +233,8 @@
 
 				camera.lookAt( lookAt.copy( position ).sub( tangent ) );
                 
+                // camera.updateProjectionMatrix();
+                // controls.update();
                 renderer.setSize(width, height);
     			effect.setSize(width, height);
     			effect.render(scene, camera);
