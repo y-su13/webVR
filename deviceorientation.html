@@ -30,6 +30,7 @@
 	<body>
 	    <center>
 	    	<a id = "alpha"></a>
+	    	<p></p>
 	    	<a id = "beta"></a>
 	    	<p></p>
 	    	<a id = "gamma"></a>
@@ -40,9 +41,9 @@
 
             function orientationHandler(event) {  
 
-            	document.getElementById( "alpha" ).innerHTML = "alpha = " + String( event.alpha ) + "&nbsp&nbsp";
-            	document.getElementById( "beta" ).innerHTML = "beta = " + String( event.beta ) + "&nbsp&nbsp";
-            	document.getElementById( "gamma" ).innerHTML = "gamma = " + String( event.gamma );
+            	document.getElementById( "alpha" ).innerHTML = "alpha = " + String( event.alpha.toFixed( 2 ) ) + "&nbsp&nbsp";
+            	document.getElementById( "beta" ).innerHTML = "beta = " + String( event.beta.toFixed( 2 ) ) + "&nbsp&nbsp";
+            	document.getElementById( "gamma" ).innerHTML = "gamma = " + String( event.gamma.toFixed( 2 ) );
 
 	        }
         </script>
