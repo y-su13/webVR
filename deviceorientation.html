@@ -44,6 +44,8 @@
 		<script src="js/DeviceOrientationControls.js"></script>
         <script type="text/javascript">
 
+        	var T = 0;
+
             var scene = new THREE.Scene();
 			var camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 5000 );
 			camera.rotation.y = Math.PI;
@@ -73,7 +75,7 @@
 
 	        function animate() {
 
-				if ( T== 0 ) {
+				if ( T== 1 ) {
 
 					window.addEventListener("deviceorientation", setDeviceOrientationControls, false);
 
