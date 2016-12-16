@@ -41,9 +41,9 @@
 
             function orientationHandler(event) {  
 
-            	document.getElementById( "alpha" ).innerHTML = "alpha = " + String( event.alpha.toFixed( 2 ) ) + "&nbsp&nbsp";
-            	document.getElementById( "beta" ).innerHTML = "beta = " + String( event.beta.toFixed( 2 ) ) + "&nbsp&nbsp";
-            	document.getElementById( "gamma" ).innerHTML = "gamma = " + String( event.gamma.toFixed( 2 ) );
+            	document.getElementById( "alpha" ).innerHTML = "alpha = " + String( Math.round( event.alpha ) ) + "&nbsp&nbsp";
+            	document.getElementById( "beta" ).innerHTML = "beta = " + String( Math.round( event.beta ) ) + "&nbsp&nbsp";
+            	document.getElementById( "gamma" ).innerHTML = "gamma = " + String( Math.round( event.gamma ) );
 
 	        }
         </script>
