@@ -29,6 +29,9 @@
 	</head>
 	<body>
 	    <center>
+	    	<input type="submit" name="T" id="T" value="Three.js" style="width:200px; height:30px;" onclick="T()">
+	    	<p></p>
+		    <input type="submit" name="H" id="H" value="HTML5" style="width:200px; height:30px;" onclick="H()">
 	    	<a id = "alpha"></a>
 	    	<p></p>
 	    	<a id = "beta"></a>
@@ -44,7 +47,17 @@
 			camera.rotation.y = Math.PI;
 			scene.add(camera);
 
-        	window.addEventListener("deviceorientation", setDeviceOrientationControls, false);
+			if ( T== 0 ) {
+
+				window.addEventListener("deviceorientation", setDeviceOrientationControls, false);
+
+			}
+
+			else {
+
+        		window.addEventListener("deviceorientation", orientationHandler, false);
+
+			}
 
         	function setDeviceOrientationControls(event) {
 
@@ -65,6 +78,19 @@
             	document.getElementById( "gamma" ).innerHTML = "gamma = " + String( Math.round( event.gamma ) );
 
 	        }
+
+            function H() {
+
+            	T = 0;
+
+            }
+
+            function T() {
+
+            	T = 1;
+
+            }
+
         </script>
 
 	</body>
