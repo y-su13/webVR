@@ -51,9 +51,9 @@
             	controls = new THREE.DeviceOrientationControls(camera, true);
 			    controls.connect();
 			    controls.update();
-			    document.getElementById( "alpha" ).innerHTML = "alpha = " + String( Math.round( controls.alpha ) );
-			    document.getElementById( "beta" ).innerHTML = "beta = " + String( Math.round( controls.beta ) );
-			    document.getElementById( "gamma" ).innerHTML = "gamma = " + String( Math.round( controls.gamma ) );
+			    document.getElementById( "alpha" ).innerHTML = "alpha = " + String( controls.alpha );
+			    document.getElementById( "beta" ).innerHTML = "beta = " + String( controls.beta );
+			    document.getElementById( "gamma" ).innerHTML = "gamma = " + String( controls.gamma );
 			    // window.removeEventListener('deviceorientation', setDeviceOrientationControls, true);
 
             }
