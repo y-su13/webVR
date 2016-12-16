@@ -75,6 +75,8 @@
 
 	        function animate() {
 
+	        	requestAnimationFrame( animate );
+
 				if ( T == 1 ) {
 
 					window.addEventListener("deviceorientation", setDeviceOrientationControls, false);
