@@ -204,7 +204,7 @@
 
 				window.addEventListener("deviceorientation", orientationHandler, false);
 
-				visit.x = tangent.x * Math.cos( alpha ) + tangent.z * Math.sin( alpha ) / Math.sqrt( tangent.x * tangent.x + tangent.z * tangent.z );
+				visit.x = tangent.x * Math.cos( alpha ) - tangent.z * Math.sin( alpha ) / Math.sqrt( tangent.x * tangent.x + tangent.z * tangent.z );
 				visit.y = tangent.y * Math.cos( alpha );
 				visit.z = tangent.z * Math.cos( alpha ) + tangent.x * Math.sin( alpha ) / Math.sqrt( tangent.x * tangent.x + tangent.z * tangent.z );
 
