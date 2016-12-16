@@ -29,9 +29,11 @@
 	</head>
 	<body>
 	    <center>
+	    	<p></p>
 	    	<input type="submit" name="T" id="T" value="Three.js" style="width:200px; height:30px;" onclick="T()">
 	    	<p></p>
 		    <input type="submit" name="H" id="H" value="HTML5" style="width:200px; height:30px;" onclick="H()">
+		    <p></p>
 	    	<a id = "alpha"></a>
 	    	<p></p>
 	    	<a id = "beta"></a>
@@ -42,22 +44,12 @@
 		<script src="js/DeviceOrientationControls.js"></script>
         <script type="text/javascript">
 
-            scene = new THREE.Scene();
-			camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 5000 );
+            var scene = new THREE.Scene();
+			var camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 5000 );
 			camera.rotation.y = Math.PI;
 			scene.add(camera);
 
-			if ( T== 0 ) {
-
-				window.addEventListener("deviceorientation", setDeviceOrientationControls, false);
-
-			}
-
-			else {
-
-        		window.addEventListener("deviceorientation", orientationHandler, false);
-
-			}
+            animate();
 
         	function setDeviceOrientationControls(event) {
 
@@ -76,6 +68,22 @@
             	document.getElementById( "alpha" ).innerHTML = "alpha = " + String( Math.round( event.alpha ) );
             	document.getElementById( "beta" ).innerHTML = "beta = " + String( Math.round( event.beta ) );
             	document.getElementById( "gamma" ).innerHTML = "gamma = " + String( Math.round( event.gamma ) );
+
+	        }
+
+	        function animate() {
+
+				if ( T== 0 ) {
+
+					window.addEventListener("deviceorientation", setDeviceOrientationControls, false);
+
+				}
+
+				else {
+
+	        		window.addEventListener("deviceorientation", orientationHandler, false);
+
+				}	        	
 
 	        }
 
