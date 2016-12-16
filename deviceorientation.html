@@ -29,16 +29,12 @@
 	</head>
 	<body>
 	    <center>
-	    	<p></p>
-	    	<input type="submit" name="T" id="T" value="Three.js" style="width:200px; height:30px;" onclick="T()">
-	    	<p></p>
-		    <input type="submit" name="H" id="H" value="HTML5" style="width:200px; height:30px;" onclick="H()">
 		    <p></p>
-	    	<a id = "alpha"></a>
+	    	<a id = "halpha"></a><a id = "talpha"></a>
 	    	<p></p>
-	    	<a id = "beta"></a>
+	    	<a id = "hbeta"></a><a id = "tbeta"></a>
 	    	<p></p>
-	    	<a id = "gamma"></a>
+	    	<a id = "hgamma"></a><a id = "tgamma"></a>
 	    </center>
 	    <script src="js/three.js"></script>
 		<script src="js/DeviceOrientationControls.js"></script>
@@ -50,58 +46,30 @@
 			var camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 5000 );
 			camera.rotation.y = Math.PI;
 			scene.add(camera);
+            window.addEventListener("deviceorientation", orientationHandler, false);
+            window.addEventListener("deviceorientation", setDeviceOrientationControls, false);
 
-            animate();
+
 
         	function setDeviceOrientationControls(event) {
 
             	controls = new THREE.DeviceOrientationControls(camera, true);
 			    controls.connect();
 			    controls.update();
-			    document.getElementById( "alpha" ).innerHTML = "alpha = " + String( controls.alpha );
-			    document.getElementById( "beta" ).innerHTML = "beta = " + String( controls.beta );
-			    document.getElementById( "gamma" ).innerHTML = "gamma = " + String( controls.gamma );
+			    document.getElementById( "talpha" ).innerHTML = "talpha = " + String( Math.round( controls.alpha * 180 / Math.PI ) );
+			    document.getElementById( "tbeta" ).innerHTML = "tbeta = " + String( Math.round( controls.beta * 180 / Math.PI ) );
+			    document.getElementById( "tgamma" ).innerHTML = "tgamma = " + String( Math.round( controls.gamma * 180 / Math.PI ) );
 			    // window.removeEventListener('deviceorientation', setDeviceOrientationControls, true);
 
             }
 
             function orientationHandler(event) {
 
-            	document.getElementById( "alpha" ).innerHTML = "alpha = " + String( Math.round( event.alpha ) );
-            	document.getElementById( "beta" ).innerHTML = "beta = " + String( Math.round( event.beta ) );
-            	document.getElementById( "gamma" ).innerHTML = "gamma = " + String( Math.round( event.gamma ) );
+            	document.getElementById( "halpha" ).innerHTML = "halpha = " + String( Math.round( event.alpha ) ) + "&nbsp&nbsp";
+            	document.getElementById( "hbeta" ).innerHTML = "hbeta = " + String( Math.round( event.beta ) ) + "&nbsp&nbsp";
+            	document.getElementById( "hgamma" ).innerHTML = "hgamma = " + String( Math.round( event.gamma ) ) + "&nbsp&nbsp";
 
 	        }
-
-	        function animate() {
-
-	        	requestAnimationFrame( animate );
-
-				if ( T > 0 ) {
-
-					window.addEventListener("deviceorientation", setDeviceOrientationControls, false);
-
-				}
-
-				else {
-
-	        		window.addEventListener("deviceorientation", orientationHandler, false);
-
-				}	        	
-
-	        }
-
-            function H() {
-
-            	T = -1;
-
-            }
-
-            function T() {
-
-            	T = 1;
-
-            }
 
         </script>
 
