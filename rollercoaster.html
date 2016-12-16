@@ -214,7 +214,7 @@
 				velocity = Math.max( velocity, 0.00004 );
 
 				// camera.lookAt( lookAt.copy( position ).add( visit ) );
-				camera.lookAt( lookAt.copy( position ) );
+				camera.lookAt( lookAt.copy( position ).add( tangent ) );
                 
                 renderer.setSize(width, height);
     			effect.setSize(width, height);
