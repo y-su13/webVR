@@ -204,7 +204,7 @@
 
 				window.addEventListener("deviceorientation", orientationHandler, false);
 
-				visit.x = tangent.x * Math.cos( alpha ) - tangent.z * Math.sin( alpha ) / Math.sqrt( tangent.x * tangent.x + tangent.z * tangent.z );
+				visit.x = tangent.x * Math.cos( alpha ) + tangent.z * Math.sin( alpha ) / Math.sqrt( tangent.x * tangent.x + tangent.z * tangent.z );
 				visit.y = tangent.y * Math.cos( alpha );
 				visit.z = tangent.z * Math.cos( alpha ) + tangent.x * Math.sin( alpha ) / Math.sqrt( tangent.x * tangent.x + tangent.z * tangent.z );
 
@@ -225,9 +225,9 @@
 
 			function orientationHandler(event) {
 
-				alpha = Math.round( event.alpha ) * Math.PI / 180;
-				beta  = Math.round( event.beta  ) * Math.PI / 180;
-				gamma = Math.round( event.gamma ) * Math.PI / 180;
+				alpha = -Math.round( event.alpha / 3 ) * Math.PI / 60;
+				beta  =  Math.round( event.beta  / 3 ) * Math.PI / 180;
+				gamma =  Math.round( event.gamma / 3 ) * Math.PI / 180;
 
 			}
 
