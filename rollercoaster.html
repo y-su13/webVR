@@ -26,7 +26,7 @@
      	<script src="js/DeviceOrientationControls.js"></script>
 
 		<script>
-            var scene, camera, renderer, effect, element, controls, geometry, group, curve;
+            var scene, camera, renderer, effect, element, geometry, group, curve, alpha, beta, gamma;
             var clock = new THREE.Clock();
 
             var position = new THREE.Vector3();
@@ -202,18 +202,32 @@
 				position.x -= 3 * tangent.x * tangent.y * Math.sqrt( tangent.x * tangent.x + tangent.z * tangent.z );
 				position.z -= 3 * tangent.z * tangent.y * Math.sqrt( tangent.x * tangent.x + tangent.z * tangent.z );
 
+				window.addEventListener("deviceorientation", orientationHandler, false);
+
+				visit.x = tangent.x * Math.cos( alpha ) - tangent.z * Math.sin( alpha ) / Math.sqrt( tangent.x * tangent.x + tangent.z * tangent.z );
+				visit.y = tangent.y * Math.cos( alpha );
+				visit.z = tangent.z * Math.cos( alpha ) + tangent.x * Math.sin( alpha ) / Math.sqrt( tangent.x * tangent.x + tangent.z * tangent.z );
+
 				camera.position.copy( position );
 
 				velocity -= tangent.y * 0.0000015 * delta;
 				velocity = Math.max( velocity, 0.00004 );
 
-				// camera.lookAt( lookAt.copy( position ).add( tangent ) );
-				camera.lookAt( lookAt.copy( position ) );
+				camera.lookAt( lookAt.copy( position ).add( visit ) );
+				// camera.lookAt( lookAt.copy( position ) );
                 
                 renderer.setSize(width, height);
     			effect.setSize(width, height);
 
     			effect.render(scene, camera);
+
+			}
+
+			function orientationHandler(event) {
+
+				alpha = Math.round( event.alpha ) * Math.PI / 180;
+				beta  = Math.round( event.beta  ) * Math.PI / 180;
+				gamma = Math.round( event.gamma ) * Math.PI / 180;
 
 			}
 
