@@ -225,7 +225,7 @@
 
 			function orientationHandler(event) {
 
-				alpha = -Math.round( event.alpha / 6 ) * Math.PI / 30;
+				alpha = -event.alpha * Math.PI / 180;
 				beta  =  Math.round( event.beta  / 3 ) * Math.PI / 180;
 				gamma =  Math.round( event.gamma / 3 ) * Math.PI / 180;
 
