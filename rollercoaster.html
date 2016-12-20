@@ -227,7 +227,7 @@
 
 			function orientationHandler(event) {
 
-				alpha = -Math.round( event.alpha ) * Math.PI / 180;
+				alpha = -event.alpha * Math.PI / 180;
 				alpha = alpha * 0.05 + oldalpha * 0.95;
 				oldalpha = alpha;
 				if ( count % 100 == 0 ) {
@@ -247,7 +247,7 @@
 
 			function setoldalpha(event) {
 
-				oldalpha = -Math.round( event.alpha ) * Math.PI / 180 ;
+				oldalpha = -event.alpha * Math.PI / 180;
 				oldloc = oldalpha;
 				newloc = oldalpha;
 				// oldbeta  =  Math.round( event.beta  / 3 ) * Math.PI / 180;
