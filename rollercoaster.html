@@ -247,7 +247,7 @@
 
 			function setoldalpha(event) {
 
-				oldalpha = -event.alpha * Math.PI / 180;
+				oldalpha = -Math.round( event.alpha ) * Math.PI / 180 ;
 				oldloc = oldalpha;
 				newloc = oldalpha;
 				// oldbeta  =  Math.round( event.beta  / 3 ) * Math.PI / 180;
