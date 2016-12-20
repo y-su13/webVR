@@ -138,7 +138,7 @@
 
 				renderer.render( scene, camera );
 
-				particle1.position.x = -1200 + Math.random() * 400;
+				particle1.position.x = -1050 + Math.random() * 100 + Math.sin( count / 100 ) * 400;
 
 				if ( count % 100 == 0 ) {
 
@@ -149,7 +149,7 @@
 
 				particle2.position.x = ( oldloc2 * ( 100 - count % 100 ) + newloc2 * ( count % 100 ) ) / 100;
 
-				particle3.position.x = 0.01 * particle1.position.x + 0.99 * oldloc3;
+				particle3.position.x = 0.1 * particle1.position.x + 0.9 * oldloc3;
 
 				if ( count % 100 == 0 ) {
 
