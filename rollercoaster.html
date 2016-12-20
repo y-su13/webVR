@@ -209,16 +209,16 @@
 				visit.x = tangent.x * Math.cos( alpha ) - tangent.z * Math.sin( alpha ) / Math.sqrt( tangent.x * tangent.x + tangent.z * tangent.z );
 				visit.y = tangent.y * Math.cos( alpha );
 				visit.z = tangent.z * Math.cos( alpha ) + tangent.x * Math.sin( alpha ) / Math.sqrt( tangent.x * tangent.x + tangent.z * tangent.z );
-				visit.x = 0.9 * oldx + 0.1 * visit.x;
-				visit.y = 0.9 * oldy + 0.1 * visit.y;
-				visit.z = 0.9 * oldz + 0.1 * visit.z;
-				l = Math.sqrt( visit.x * visit.x + visit.y * visit.y + visit.z * visit.z );
-				visit.x = visit.x / l;
-				visit.y = visit.y / l;
-				visit.z = visit.z / l;
-				oldx = visit.x;
-				oldy = visit.y;
-				oldz = visit.z;
+				// visit.x = 0.9 * oldx + 0.1 * visit.x;
+				// visit.y = 0.9 * oldy + 0.1 * visit.y;
+				// visit.z = 0.9 * oldz + 0.1 * visit.z;			
+				// l = Math.sqrt( visit.x * visit.x + visit.y * visit.y + visit.z * visit.z );
+				// visit.x = visit.x / l;
+				// visit.y = visit.y / l;
+				// visit.z = visit.z / l;
+				// oldx = visit.x;
+				// oldy = visit.y;
+				// oldz = visit.z;
 
 				camera.position.copy( position );
 
