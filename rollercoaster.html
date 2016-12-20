@@ -227,7 +227,7 @@
 
 			function orientationHandler(event) {
 
-				alpha = -event.alpha * Math.PI / 180;
+				alpha = -Math.round( event.alpha ) * Math.PI / 180;
 				alpha = alpha * 0.05 + oldalpha * 0.95;
 				oldalpha = alpha;
 				if ( count % 100 == 0 ) {
