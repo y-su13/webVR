@@ -204,11 +204,11 @@
 				position.x -= 3 * tangent.x * tangent.y * Math.sqrt( tangent.x * tangent.x + tangent.z * tangent.z );
 				position.z -= 3 * tangent.z * tangent.y * Math.sqrt( tangent.x * tangent.x + tangent.z * tangent.z );
 
-				window.addEventListener("deviceorientation", orientationHandler, false);
+				// window.addEventListener("deviceorientation", orientationHandler, false);
 
-				visit.x = tangent.x * Math.cos( alpha ) - tangent.z * Math.sin( alpha ) / Math.sqrt( tangent.x * tangent.x + tangent.z * tangent.z );
-				visit.y = tangent.y * Math.cos( alpha );
-				visit.z = tangent.z * Math.cos( alpha ) + tangent.x * Math.sin( alpha ) / Math.sqrt( tangent.x * tangent.x + tangent.z * tangent.z );
+				// visit.x = tangent.x * Math.cos( alpha ) - tangent.z * Math.sin( alpha ) / Math.sqrt( tangent.x * tangent.x + tangent.z * tangent.z );
+				// visit.y = tangent.y * Math.cos( alpha );
+				// visit.z = tangent.z * Math.cos( alpha ) + tangent.x * Math.sin( alpha ) / Math.sqrt( tangent.x * tangent.x + tangent.z * tangent.z );
 				// visit.x = 0.9 * oldx + 0.1 * visit.x;
 				// visit.y = 0.9 * oldy + 0.1 * visit.y;
 				// visit.z = 0.9 * oldz + 0.1 * visit.z;			
@@ -225,8 +225,8 @@
 				velocity -= tangent.y * 0.0000015 * delta;
 				velocity = Math.max( velocity, 0.00004 );
 
-				camera.lookAt( lookAt.copy( position ).add( visit ) );
-				// camera.lookAt( lookAt.copy( position ).add( tangent ) );
+				// camera.lookAt( lookAt.copy( position ).add( visit ) );
+			    camera.lookAt( lookAt.copy( position ).add( tangent ) );
                 
                 renderer.setSize(width, height);
     			effect.setSize(width, height);
@@ -237,7 +237,7 @@
 
 			function orientationHandler(event) {
 
-				alpha = -Math.round( event.alpha / 3 ) * Math.PI / 120;
+				alpha = -Math.round( event.alpha / 3 ) * Math.PI / 60;
 				// beta  =  Math.round( event.beta  / 3 ) * Math.PI / 180;
 				// gamma =  Math.round( event.gamma / 3 ) * Math.PI / 180;
 
