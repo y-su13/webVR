@@ -34,7 +34,7 @@
 			var oldloc4 =  1000;
 			var word = "test1";
 
-			var particle1, particle2, particle3, particle4;
+			var particle1, particle2, particle3, particle4, particles1, particles2, particles3, particles4, particle;
 
 			var mouseX = 0, mouseY = 0;
 
@@ -71,36 +71,84 @@
 				} );
 
 				particle1  = new THREE.Sprite( material );
-				particle1.position.x = -1000;
+				particle1.position.x = -2000;
                 particle1.position.z = 0.0;
                 particle1.position.y = 500.0;
                 particle1.scale.x = 50;
 				particle1.scale.y = 50;
 				scene.add( particle1 );
 
+				particles1 = new Array();
+				for ( var ix = 0; ix < 199; ix ++ ) {
+
+					particle = particles1[ ix ] = new THREE.Sprite( material );
+					particle.position.x = -1999 + 10 * ix;
+					particle.position.y = 500.0;
+					particle.scale.x = 10;
+					particle.scale.y = 10;
+				    scene.add( particle );
+
+			    }
+
 				particle2 = new THREE.Sprite( material );
-				particle2.position.x = 1000;
+				particle2.position.x = 200;
                 particle2.position.z = 0.0;
                 particle2.position.y = 500.0;
                 particle2.scale.x = 50;
 				particle2.scale.y = 50;
 				scene.add( particle2 );
 
+				particles2 = new Array();
+				for ( var ix = 0; ix < 199; ix ++ ) {
+
+					particle = particles2[ ix ] = new THREE.Sprite( material );
+					particle.position.x = 201 + 10 * ix;
+					particle.position.y = 500.0;
+					particle.scale.x = 10;
+					particle.scale.y = 10;
+				    scene.add( particle );
+
+			    }
+
 				particle3 = new THREE.Sprite( material );
-				particle3.position.x = -1000;
+				particle3.position.x = -2000;
                 particle3.position.z = 0.0;
-                particle3.position.y = -300.0;
+                particle3.position.y = -500.0;
                 particle3.scale.x = 50;
 				particle3.scale.y = 50;
-				scene.add( particle3 );			
+				scene.add( particle3 );		
+
+				particles3 = new Array();
+				for ( var ix = 0; ix < 199; ix ++ ) {
+
+					particle = particles3[ ix ] = new THREE.Sprite( material );
+					particle.position.x = -1999 + 10 * ix;
+					particle.position.y = -500.0;
+					particle.scale.x = 10;
+					particle.scale.y = 10;
+				    scene.add( particle );
+
+			    }	
 
 				particle4 = new THREE.Sprite( material );
-				particle4.position.x = 1000;
+				particle4.position.x = 200;
                 particle4.position.z = 0.0;
-                particle4.position.y = -300.0;
+                particle4.position.y = -500.0;
                 particle4.scale.x = 50;
 				particle4.scale.y = 50;
-				scene.add( particle4 );						
+				scene.add( particle4 );		
+
+				particles4 = new Array();
+				for ( var ix = 0; ix < 199; ix ++ ) {
+
+					particle = particles4[ ix ] = new THREE.Sprite( material );
+					particle.position.x = 201 + 10 * ix;
+					particle.position.y = -500.0;
+					particle.scale.x = 10;
+					particle.scale.y = 10;
+				    scene.add( particle );
+
+			    }									
 
 				renderer = new THREE.CanvasRenderer();
 				renderer.setPixelRatio( window.devicePixelRatio );
@@ -138,29 +186,47 @@
 
 				renderer.render( scene, camera );
 
-				particle1.position.x = -1050 + Math.random() * 100 + Math.sin( count / 100 ) * 400;
+				particle1.position.y = 450 + Math.random() * 100 + Math.sin( count / 100 ) * 400;
 
-				if ( count % 100 == 0 ) {
+				if ( count % 50 == 0 ) {
 
-					newloc2 =  2000 + particle1.position.x;
-					oldloc2 = particle2.position.x;
-
-				}
-
-				particle2.position.x = ( oldloc2 * ( 100 - count % 100 ) + newloc2 * ( count % 100 ) ) / 100;
-
-				particle3.position.x = 0.1 * particle1.position.x + 0.9 * oldloc3;
-
-				if ( count % 100 == 0 ) {
-
-					newloc4 =  2000 + particle3.position.x;
-					oldloc4 = particle4.position.x;
+					newloc2 = particle1.position.y;
+					oldloc2 = particle2.position.y;
 
 				}
 
-				particle4.position.x = ( oldloc4 * ( 100 - count % 100 ) + newloc4 * ( count % 100 ) ) / 100;
+				particle2.position.y = ( oldloc2 * ( 50 - count % 50 ) + newloc2 * ( count % 50 ) ) / 50;
 
-                oldloc3 = particle3.position.x;
+				particle3.position.y = 0.1 * ( particle1.position.y - 1000 ) + 0.9 * oldloc3;
+
+				if ( count % 50 == 0 ) {
+
+					newloc4 = particle3.position.y;
+					oldloc4 = particle4.position.y;
+
+				}
+
+				if ( count % 10 == 0)
+				{
+
+					for ( var ix = 198; ix > 0; ix -- ) {
+
+						particles1[ ix ].position.y = particles1[ ix - 1 ].position.y;
+						particles2[ ix ].position.y = particles2[ ix - 1 ].position.y;
+						particles3[ ix ].position.y = particles3[ ix - 1 ].position.y;
+						particles4[ ix ].position.y = particles4[ ix - 1 ].position.y;
+
+				    }
+                    particles1[ 0 ].position.y = particle1.position.y;
+                    particles2[ 0 ].position.y = particle2.position.y;
+                    particles3[ 0 ].position.y = particle3.position.y;
+                    particles4[ 0 ].position.y = particle4.position.y;
+
+				}
+
+				particle4.position.y = ( oldloc4 * ( 50 - count % 50 ) + newloc4 * ( count % 50 ) ) / 50;
+
+                oldloc3 = particle3.position.y;
 
 				count += 1;
 
