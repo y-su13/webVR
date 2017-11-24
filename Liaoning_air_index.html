@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<style type="text/css">
+		body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+		#allmap{height:90%;width:100%;}
+	</style>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=1XjLLEhZhQNUzd93EjU5nOGQ"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.0/jquery.min.js"></script>
+	<title>test</title>
+</head>
+<body>
+	<div id="allmap">
+	</div>
+	<p></p>
+		<center>
+		<input type="submit" name="first" id="first" value="<<" style="width:50px; height:30px;" onclick="first()">
+		<a>&nbsp</a>
+		<input type="submit" name="minus_time" id="minus_time" value="<" style="width:50px; height:30px;" onclick="minus_time()">
+		<a>&nbsp</a>
+		<a id="T"></a>
+		<a>&nbsp</a>
+		<input type="submit" name="add_time" id="add_time" value=">" style="width:50px; height:30px;" onclick="add_time()">
+		<a>&nbsp</a>
+		<input type="submit" name="last" id="last" value=">>" style="width:50px; height:30px;" onclick="last()">
+		</center>
+	<p></p>
+		<center>
+		<input type="submit" name="CO" id="CO" value="CO" style="width:50px; height:30px;" onclick="CO()">
+		<a>&nbsp</a>
+		<input type="submit" name="NO2" id="NO2" value="NO2" style="width:50px; height:30px;" onclick="NO2()">
+		<a>&nbsp</a>
+		<input type="submit" name="O3" id="O3" value="O3" style="width:50px; height:30px;" onclick="O3()">
+		<a>&nbsp</a>
+		<input type="submit" name="PM10" id="PM10" value="PM10" style="width:50px; height:30px;" onclick="PM10()">
+		<a>&nbsp</a>
+		<input type="submit" name="PM25" id="PM25" value="PM2.5" style="width:50px; height:30px;" onclick="PM25()">
+		<a>&nbsp</a>
+		<input type="submit" name="SO2" id="SO2" value="SO2" style="width:50px; height:30px;" onclick="SO2()">
+		<a>&nbsp</a>
+		<input type="submit" name="AQI" id="AQI" value="AQI" style="width:50px; height:30px;" onclick="AQI()">
+		</center>
+</body>
+</html>
+<script>
+    var map = new BMap.Map("allmap");
+    map.enableScrollWheelZoom(true);
+    var bdary = new BMap.Boundary();
+	bdary.get("辽宁省", function(rs){       //获取行政区域 
+		var count = rs.boundaries.length; //行政区域的点有多少个
+		if (count === 0) {
+			alert('未能获取当前输入行政区域');
+			return ;
+		}
+	  	var pointArray = [];
+		for (var i = 0; i < count; i++) {
+			var ply = new BMap.Polygon(rs.boundaries[i]); //建立多边形覆盖物
+			pointArray = pointArray.concat(ply.getPath());
+			map.setViewport(pointArray);
+		}             
+	}); 
+	var time = [];
+  	var time_begin = [];
+  	var lines = [];
+  	var cities = ["沈阳市", "大连市", "秦皇岛市", "鞍山市", "抚顺市", "本溪市", "丹东市", "锦州市", "营口市", "阜新市", "辽阳市", "盘锦市", "铁岭市", "朝阳市", "葫芦岛市"];
+  	var cities_pinyin = ["shen yang shi ", "da lian shi ", "wa fang dian shi ", "an shan shi ", "fu shun shi ", "ben xi shi ", "dan dong shi ", "jin zhou shi ", "ying kou shi ", "fu xin shi ", "liao yang shi ", "pan jin shi ", "tie ling shi ", "chao yang shi ", "hu lu dao shi "]
+  	var pollution = ["CO", "NO2", "O3", "PM10", "PM2.5", "SO2", "AQI"];
+  	var t = 0;
+  	var t_max = 0;
+  	var kind = 6;
+    $.get('https://y-su13.github.io/webVR/Liaoning2016.csv', function(data,status){
+	  	lines = data.split("\n");
+	  	time[0] = lines[1].split(",")[0];
+	  	time_begin[0] = 1;
+	  	l = 1;
+	  	for ( var i = 2; i < lines.length - 1; i ++){
+	  		line = lines[i].split(",");
+	        if ( line[0] != time[l - 1]){
+	              time[l] = line[0];
+	              time_begin[l] = i;
+	              l += 1;
+	        }
+	  	}
+	  	t_max = l - 1;
+	  	time_begin[l] = lines.length - 1;
+	  	draw_map(t, kind);
+    });
+
+    function draw_map(){
+    	l = 0;
+	  	n = 0;
+	  	air = 0;
+	  	for (var i = time_begin[t]; i < time_begin[t + 1]; i++){
+	  		document.getElementById( "T" ).innerHTML = String(time[t]) + "&nbsp&nbsp" + pollution[kind - 5];
+	  		line = lines[i].split(",");
+	  		if (line[1] != cities_pinyin[l]){
+	  			if ( n == 0){
+	  				average = null;
+	  			}
+	  			else{
+	  				average = air / n;
+	  				    var bdary = new BMap.Boundary();
+	  				    if (l != 2){
+							bdary.get(cities[l], function(rs){       //获取行政区域 
+								var count = rs.boundaries.length; //行政区域的点有多少个
+								if (count === 0) {
+									alert('未能获取当前输入行政区域');
+									return ;
+								}
+							  	var pointArray = [];
+								for (var i = 0; i < count; i++) {
+									var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight: 0, strokeColor: "rgba(0, 0, 0, 0)", fillColor:color_of(average, kind)}); //建立多边形覆盖物
+									pointArray = pointArray.concat(ply.getPath());
+									map.addOverlay(ply);
+								}             
+							}); 
+	  				    }
+	  			}
+	  			l += 1;
+	  			air = 0;
+	  			n = 0;
+	  		}
+	        air += parseFloat(line[kind]);
+	        //document.write(line[6] + '</br>');
+	        n += 1;
+	  	}
+	  	if ( n == 0){
+			average = null;
+		}
+		else{
+			average = air / n;
+			    var bdary = new BMap.Boundary();
+			bdary.get(cities[l], function(rs){       //获取行政区域 
+				var count = rs.boundaries.length; //行政区域的点有多少个
+				if (count === 0) {
+					alert('未能获取当前输入行政区域');
+					return ;
+				}
+			  	var pointArray = [];
+				for (var i = 0; i < count; i++) {
+					var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight: 0, strokeColor: "rgba(0, 0, 0, 0)", fillColor:color_of(average, kind)}); //建立多边形覆盖物
+					pointArray = pointArray.concat(ply.getPath());
+					map.addOverlay(ply);
+				}             
+			}); 
+		}
+    }
+
+    function color_of(average, kind){
+        if ( average == null){
+        	c = "#ffffff"
+        }
+        else if ( average < 50){
+        	c = "#ffcbb3";
+        }
+        else if ( average < 100){
+        	c = "#ff8f59";
+        }
+        else if ( average < 200){
+        	c = "#d94600";
+        }
+        else if ( average < 500){
+        	c = "#a23400";
+        }
+        else{
+        	c = "#642100";
+        }
+        return c;
+    }
+
+    function first(){
+    	t = 0;
+    	map.clearOverlays();
+    	draw_map(t, kind);
+    }
+
+    function minus_time(){
+    	if ( t == 0){
+    		alert("已是最早时刻的数据！");
+    		return
+    	}
+    	t -= 1;
+    	map.clearOverlays();
+    	draw_map(t, kind);
+    }
+
+    function add_time(){
+    	if ( t == t_max){
+    		alert("已是最晚时刻的数据！");
+    		return
+    	}
+    	t += 1;
+    	map.clearOverlays();
+    	draw_map(t, kind);
+    }
+
+    function last(){
+    	t = t_max;
+    	map.clearOverlays();
+    	draw_map(t, kind);
+    }
+
+    function CO(){
+    	kind = 5;
+    	map.clearOverlays();
+    	draw_map(t, kind);
+    }
+
+    function NO2(){
+    	kind = 6;
+    	map.clearOverlays();
+    	draw_map(t, kind);
+    }
+
+    function O3(){
+    	kind = 7;
+    	map.clearOverlays();
+    	draw_map(t, kind);
+    }
+
+    function PM10(){
+    	kind = 8;
+    	map.clearOverlays();
+    	draw_map(t, kind);
+    }
+
+    function PM25(){
+    	kind = 9;
+    	map.clearOverlays();
+    	draw_map(t, kind);
+    }
+
+    function SO2(){
+    	kind = 10;
+    	map.clearOverlays();
+    	draw_map(t, kind);
+    }
+
+    function AQI(){
+    	kind = 11;
+    	map.clearOverlays();
+    	draw_map(t, kind);
+    }
+
+</script>
